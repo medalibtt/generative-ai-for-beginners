@@ -1,27 +1,40 @@
-// Adopting the default GitHub codespaces-jupyter template as starter
-// https://github.com/github/codespaces-jupyter
+// Lightweight devcontainer for Generative AI For Beginners
+// Based on the GitHub Codespaces Jupyter template
 {
-	"name": "Generative AI For Beginners",
-	"image": "mcr.microsoft.com/devcontainers/universal:2.11.2",
-	"hostRequirements": {
-		"cpus": 4
-	},
-	"waitFor": "onCreateCommand",
-	"updateContentCommand": "python3 -m pip install -r requirements.txt",
-	"postCreateCommand": "bash .devcontainer/post-create.sh",
-	"customizations": {
-		"codespaces": {
-			"openFiles": []
-		},
-		"vscode": {
-			"extensions": [
-				"ms-python.python",
-				"ms-toolsai.jupyter"
-			],
-			"postCreateCommand": [
-				"curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh",
-				"pip3 --disable-pip-version-check --no-cache-dir install -r requirements.txt"
-			]
-		}
-	}
+  "name": "Generative AI For Beginners",
+
+  // CHANGE 1: Use a smaller base image instead of "universal"
+  // Universal (~15GB) caused "no space left on device".
+  // Debian base is lighter and we add only the tools we need.
+  "image": "mcr.microsoft.com/devcontainers/base:debian",
+
+  "hostRequirements": {
+    "cpus": 4
+  },
+
+  // Keep updateContentCommand for Python deps
+  "updateContentCommand": "python3 -m pip install -r requirements.txt",
+
+  // Keep your custom post-create script
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+
+  // CHANGE 2: Explicitly add Python as a devcontainer feature
+  // Ensures consistent Python version across environments.
+  "features": {
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.11"
+    }
+  },
+
+  "customizations": {
+    "codespaces": {
+      "openFiles": []
+    },
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-toolsai.jupyter"
+      ]
+    }
+  }
 }
